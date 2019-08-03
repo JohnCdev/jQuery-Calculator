@@ -78,11 +78,24 @@
   <script type="text/javascript">
 
     var num1 = "";
-    var num2;
-    var currentArray = [];
+    var num2 = "";
     var calculated = false;
     var operatorChosen = false;
     var firstNumber = false;
+    var operator = "";
+
+    function initialize() {
+      num1 = "";
+      num2 = "";
+      calculated = false;
+      operatorChosen = false;
+      firstNumber = false;
+      operator = "";
+      $("#second-number").text("");
+      $("#first-number").text("");
+      $("#operator").text("");
+      $("#result").text("");
+    }
 
     $(document).ready(function () {
 
@@ -94,47 +107,59 @@
           return false;
         }
 
-        currentArray.push($(this).val());
-
         if (operatorChosen) {
           $("#second-number").append($(this).val());
+          num2 += $(this).val();
         } else {
           $("#first-number").append($(this).val());
+          num1 += $(this).val();
         }
 
       });
 
       //operator
       $(".operator").click(function () {
-        console.log(num1);
-        if (num1 != "" || calculated) {
+
+        if (num1 === "" || operatorChosen === true) {
           console.log("dont operate");
           return false;
         }
 
-        if (num1 === undefined) {
-          num1 = currentArray.join("");
-          num1 = parseInt(num1);
-          console.log(num1);
-        } else {
-          num2 = currentArray.join("");
-          //console.log(num2);
-        }
-
         $("#operator").append($(this).text());
-        currentArray = [];
         operatorChosen = true;
+        operator = $(this).val();
+        console.log(operator);
       });
 
       //equal
       $(".equal").click(function () {
+
+        if (calculated) {
+          console.log("No more equals");
+          return false;
+        }
+
         calculated = true;
-        console.log("equals");
+
+        num1 = parseInt(num1);
+        num2 = parseInt(num2);
+
+        if (operator === "plus") {
+          $("#result").text(num1 + num2);
+        } else if (operator === "minus") {
+          $("#result").text(num1 - num2);
+        } else if (operator === "times") {
+          $("#result").text(num1 * num2);
+        } else if (operator === "divide") {
+          $("#result").text(num1 / num2);
+        } else if (operator === "power") {
+          $("#result").text(num1 ** num2);
+        }
       });
 
       //clear
       $(".clear").click(function () {
-        console.log("clear");
+        initialize();
       });
 
     });
